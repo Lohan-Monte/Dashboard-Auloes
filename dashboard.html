@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard • Agenda de Aulões UpSeller</title>
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="brand">
+      UpSeller
+      <span class="brand-sub">Agenda de Aulões</span>
+    </div>
+    <div class="nav-links">
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="responsaveis.html">Responsáveis</a>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="user-chip">
+      <span class="avatar-dot" id="avatarDot">--</span>
+      <span id="userEmail">carregando...</span>
+    </div>
+    <button class="logout-btn" id="logoutBtn">Sair</button>
+  </div>
+</div>
+
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>Agenda de Aulões</h1>
+      <p>Defina quem apresenta e qual o tema de cada aulão. As alterações são salvas automaticamente.</p>
+    </div>
+    <div class="period-control">
+      <div class="week-nav" id="weekNavGroup">
+        <button id="prevWeek" title="Semana anterior">‹</button>
+        <span class="week-range" id="weekRange">—</span>
+        <button id="nextWeek" title="Próxima semana">›</button>
+        <button id="hojeBtn" style="width:auto; padding:0 12px; font-size:13px;">Hoje</button>
+      </div>
+
+      <div class="periodo-filtro-wrap">
+        <button class="btn-secondary periodo-btn" id="abrirPeriodoBtn">
+          📅 Filtrar por período
+        </button>
+        <div class="periodo-chip" id="periodoChip" hidden>
+          <span id="periodoChipLabel">—</span>
+          <button id="limparPeriodoBtn" title="Limpar filtro">✕</button>
+        </div>
+
+        <div class="period-popover" id="periodoPopover" hidden>
+          <div class="period-inputs">
+            <input type="text" id="inicioInput" readonly placeholder="Data inicial">
+            <span>~</span>
+            <input type="text" id="fimInput" readonly placeholder="Data final">
+          </div>
+
+          <div class="period-calendars">
+            <div class="calendar-month">
+              <div class="calendar-header">
+                <button class="cal-nav" data-nav="prev-year" title="Ano anterior">«</button>
+                <button class="cal-nav" data-nav="prev-month" title="Mês anterior">‹</button>
+                <span class="calendar-title" id="calTitleLeft"></span>
+                <span style="width:48px;"></span>
+              </div>
+              <div class="calendar-grid" id="calGridLeft"></div>
+            </div>
+            <div class="calendar-month">
+              <div class="calendar-header">
+                <span style="width:48px;"></span>
+                <span class="calendar-title" id="calTitleRight"></span>
+                <button class="cal-nav" data-nav="next-month" title="Próximo mês">›</button>
+                <button class="cal-nav" data-nav="next-year" title="Próximo ano">»</button>
+              </div>
+              <div class="calendar-grid" id="calGridRight"></div>
+            </div>
+          </div>
+
+          <div class="period-quick">
+            <button data-quick="hoje">Hoje</button>
+            <button data-quick="7d">Últimos 7 dias</button>
+            <button data-quick="30d">Últimos 30 dias</button>
+            <button data-quick="mes">Este mês</button>
+          </div>
+
+          <div class="period-footer">
+            <span class="period-hint" id="periodoAvisoLimite"></span>
+            <div style="display:flex; gap:8px;">
+              <button class="btn-secondary" id="cancelarPeriodoBtn">Cancelar</button>
+              <button class="btn-primary" id="aplicarPeriodoBtn">Aplicar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span id="tituloCard">Semana</span>
+      <span style="font-weight:400; color:var(--text-muted); font-size:12.5px;" id="saveHint" class="save-hint">Salvo ✓</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:170px;">Dia</th>
+            <th style="width:220px;">Responsável</th>
+            <th>Tema do aulão</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaBody">
+          <tr class="loading-row"><td colspan="3">Carregando agenda...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="supabase-client.js"></script>
+<script src="dashboard.js"></script>
+
+</body>
+</html>
