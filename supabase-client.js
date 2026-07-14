@@ -2,7 +2,7 @@
 // CONFIGURAÇÃO DO SUPABASE
 // Preencha com os dados do SEU projeto (Supabase > Project Settings > API)
 // =============================================================
-const SUPABASE_URL = "https://xapjgaibkhthuaeirgpl.supabase.co/rest/v1/";
+const SUPABASE_URL = "https://xapjgaibkhthuaeirgpl.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhcGpnYWlia2h0aHVhZWlyZ3BsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwNTEwMjcsImV4cCI6MjA5OTYyNzAyN30.goYe3D5kDNPDXarHgiwdmlyE3vM4k61GlzWT0Ai0cbc";
 
 // Cliente único, usado em todas as páginas
