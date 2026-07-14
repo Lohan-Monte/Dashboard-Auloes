@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Login • Agenda de Aulões UpSeller</title>
+<link rel="stylesheet" href="css/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="login-brand">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="19" stroke="#1A56DB" stroke-width="2.4"/>
+        <path d="M13 25L24 12L21 20H27L16 33L19 25H13Z" fill="#1A56DB"/>
+      </svg>
+      <h1>Agenda de Aulões</h1>
+      <p>Acesso restrito à equipe de implementação UpSeller</p>
+    </div>
+
+    <div id="loginError" class="login-error"></div>
+
+    <form id="loginForm">
+      <div class="field">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" placeholder="seunome@upseller.com" required autocomplete="username" />
+      </div>
+      <div class="field">
+        <label for="senha">Senha</label>
+        <input type="password" id="senha" placeholder="••••••••" required autocomplete="current-password" />
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;" id="loginBtn">
+        Entrar
+      </button>
+    </form>
+  </div>
+</div>
+
+<script src="js/supabase-client.js"></script>
+<script>
+  // Se já estiver logado, vai direto pro dashboard
+  (async () => {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session) window.location.href = "dashboard.html";
+  })();
+
+  const form = document.getElementById("loginForm");
+  const errorBox = document.getElementById("loginError");
+  const btn = document.getElementById("loginBtn");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorBox.classList.remove("show");
+    btn.disabled = true;
+    btn.textContent = "Entrando...";
+
+    const email = document.getElementById("email").value.trim();
+    const senha = document.getElementById("senha").value;
+
+    const { error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password: senha,
+    });
+
+    if (error) {
+      errorBox.textContent = "E-mail ou senha inválidos. Verifique e tente novamente.";
+      errorBox.classList.add("show");
+      btn.disabled = false;
+      btn.textContent = "Entrar";
+      return;
+    }
+
+    window.location.href = "dashboard.html";
+  });
+</script>
+
+</body>
+</html>

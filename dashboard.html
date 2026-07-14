@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dashboard • Agenda de Aulões UpSeller</title>
+<link rel="stylesheet" href="css/style.css" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="brand">
+      <svg width="24" height="24" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="19" stroke="#ffffff" stroke-width="2.4"/>
+        <path d="M13 25L24 12L21 20H27L16 33L19 25H13Z" fill="#ffffff"/>
+      </svg>
+      UpSeller
+      <span class="brand-sub">Agenda de Aulões</span>
+    </div>
+    <div class="nav-links">
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="responsaveis.html">Responsáveis</a>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="user-chip">
+      <span class="avatar-dot" id="avatarDot">--</span>
+      <span id="userEmail">carregando...</span>
+    </div>
+    <button class="logout-btn" id="logoutBtn">Sair</button>
+  </div>
+</div>
+
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>Agenda de Aulões</h1>
+      <p>Defina quem apresenta e qual o tema de cada aulão. As alterações são salvas automaticamente.</p>
+    </div>
+    <div class="week-nav">
+      <button id="prevWeek" title="Semana anterior">‹</button>
+      <span class="week-range" id="weekRange">—</span>
+      <button id="nextWeek" title="Próxima semana">›</button>
+      <button id="hojeBtn" style="width:auto; padding:0 12px; font-size:13px;">Hoje</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      Semana
+      <span style="font-weight:400; color:var(--text-muted); font-size:12.5px;" id="saveHint" class="save-hint">Salvo ✓</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:170px;">Dia</th>
+            <th style="width:220px;">Responsável</th>
+            <th>Tema do aulão</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaBody">
+          <tr class="loading-row"><td colspan="3">Carregando agenda...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="js/supabase-client.js"></script>
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>
