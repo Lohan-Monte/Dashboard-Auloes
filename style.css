@@ -328,7 +328,7 @@ tbody tr:hover { background: #fafbfd; }
 
 /* Separa visualmente uma semana da outra quando o filtro de período abrange várias semanas */
 .week-separator td {
-  border-top: 2px solid var(--border);
+  border-top: 4px solid var(--border);
   padding-top: 18px;
 }
 .week-separator td:first-child {
