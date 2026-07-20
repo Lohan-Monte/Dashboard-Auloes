@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Redefinir senha • Agenda de Aulões UpSeller</title>
+<link rel="stylesheet" href="style.css" />
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="login-brand">
+      <span style="font-size:22px; font-weight:800; color:#1A56DB; letter-spacing:.2px;">UpSeller</span>
+      <h1>Criar nova senha</h1>
+      <p>Escolha uma nova senha para acessar a Agenda de Aulões.</p>
+    </div>
+
+    <div id="msgErro" class="login-error"></div>
+    <div id="msgSucesso" class="login-success"></div>
+
+    <form id="redefinirForm">
+      <div class="field">
+        <label for="novaSenha">Nova senha</label>
+        <input type="password" id="novaSenha" placeholder="••••••••" required autocomplete="new-password" minlength="6" />
+      </div>
+      <div class="field">
+        <label for="confirmarSenha">Confirmar nova senha</label>
+        <input type="password" id="confirmarSenha" placeholder="••••••••" required autocomplete="new-password" minlength="6" />
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;" id="salvarBtn">
+        Salvar nova senha
+      </button>
+      <div style="text-align:center; margin-top:16px;">
+        <a href="index.html" style="font-size:13px; color:var(--text-muted); text-decoration:none;">← Voltar para o login</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="supabase-client.js"></script>
+<script>
+  const form = document.getElementById("redefinirForm");
+  const errorBox = document.getElementById("msgErro");
+  const successBox = document.getElementById("msgSucesso");
+  const btn = document.getElementById("salvarBtn");
+
+  let sessaoDeRecuperacaoOk = false;
+
+  // Quando o usuário clica no link recebido por e-mail, o Supabase reconhece
+  // o token de recuperação que vem na própria URL e dispara este evento.
+  supabaseClient.auth.onAuthStateChange((event) => {
+    if (event === "PASSWORD_RECOVERY") {
+      sessaoDeRecuperacaoOk = true;
+    }
+  });
+
+  // Fallback: se já existir uma sessão válida quando a página carregar
+  // (o supabase-js já processa o token da URL automaticamente), libera o formulário também.
+  (async () => {
+    const { data } = await supabaseClient.auth.getSession();
+    if (data.session) sessaoDeRecuperacaoOk = true;
+  })();
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    errorBox.classList.remove("show");
+    successBox.classList.remove("show");
+
+    const novaSenha = document.getElementById("novaSenha").value;
+    const confirmarSenha = document.getElementById("confirmarSenha").value;
+
+    if (novaSenha.length < 6) {
+      errorBox.textContent = "A senha precisa ter pelo menos 6 caracteres.";
+      errorBox.classList.add("show");
+      return;
+    }
+    if (novaSenha !== confirmarSenha) {
+      errorBox.textContent = "As senhas não coincidem.";
+      errorBox.classList.add("show");
+      return;
+    }
+
+    if (!sessaoDeRecuperacaoOk) {
+      errorBox.textContent = "Este link de recuperação é inválido ou expirou. Solicite um novo link.";
+      errorBox.classList.add("show");
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Salvando...";
+
+    try {
+      const { error } = await supabaseClient.auth.updateUser({ password: novaSenha });
+
+      if (error) {
+        errorBox.textContent = "Não foi possível salvar a nova senha: " + error.message;
+        errorBox.classList.add("show");
+        btn.disabled = false;
+        btn.textContent = "Salvar nova senha";
+        return;
+      }
+
+      successBox.textContent = "Senha alterada com sucesso! Redirecionando para o login...";
+      successBox.classList.add("show");
+      form.style.display = "none";
+
+      setTimeout(async () => {
+        await supabaseClient.auth.signOut();
+        window.location.href = "index.html";
+      }, 2200);
+    } catch (e) {
+      errorBox.textContent = "Erro inesperado ao salvar a senha: " + e.message;
+      errorBox.classList.add("show");
+      btn.disabled = false;
+      btn.textContent = "Salvar nova senha";
+    }
+  });
+</script>
+
+</body>
+</html>
